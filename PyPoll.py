@@ -1,10 +1,5 @@
 import csv
 import os
-
-
-
-import csv
-import os
 #Select the file to access the data
 file_to_load = os.path.join("Resources", "election_results.csv")
 #Select the file to write
@@ -38,23 +33,35 @@ with open (file_to_load) as election_data:
             #Start counting the vote count for the unique candidate
             candidate_vote[candidate_name] = 0
         candidate_vote[candidate_name] +=1
+with open(file_to_save,"w") as txt_file:
+    election_results = (
+        f"\nElection Results\n"
+        f"-------------------\n"
+        f"Total Votes: {total_vote:,}\n"
+        f"-------------------\n")
+    print(election_results,end="")
+    txt_file.write(election_results)
+    
     for candidate_name in candidate_vote:
         
         vote = candidate_vote[candidate_name]
         vote_percentage = (float(vote)/float(total_vote))*100
-        print(f"{candidate_name}: {vote_percentage:.1f}% ({vote:,})\n")
+        candidate_result = (f"{candidate_name}: {vote_percentage:.1f}% ({vote:,})\n")
+        print(candidate_result,end="")
+        txt_file.write(candidate_result)
 
         if (vote>winning_count) and (vote_percentage>winning_percentage):
             winning_count = vote
             winning_percentage = vote_percentage
             winning_candidate = candidate_name
-            winning_candidate_summary = (
-                f"-------------------\n"
-                f"Winner:{winning_candidate}\n"
-                f"Winning Vote Count:{winning_count}\n"
-                f"Winning Percentage: {winning_percentage:.1f}%\n"
-                f"-------------------\n")
-print(winning_candidate_summary)
+    winning_candidate_summary = (
+        f"-------------------\n"
+        f"Winner:{winning_candidate}\n"
+        f"Winning Vote Count:{winning_count:,}\n"
+        f"Winning Percentage: {winning_percentage:.1f}%\n"
+        f"-------------------\n")
+    print(winning_candidate_summary,end="")
+    txt_file.write(winning_candidate_summary)
 
 
 
